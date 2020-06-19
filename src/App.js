@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ReadContent from './components/ReadContent';
+import CreateContent from './components/CreateContent';
 
 class App extends React.Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class App extends React.Component {
     this.max_content_id = 3;
     // 데이터를 추가할 때(Create 기능을 사용할 때) 사용하는 정보일 뿐 ui에 영향을 주지 않으므로 state 값으로 주지 않는다
     this.state = {
-      mode: 'welcome',
+      mode: 'create',
       selected_content_id: 1,
       subject: { title: 'WEB', sub: 'World Wide Web' },
       welcome: { title: 'Welcome', desc: 'Hello React!' },
@@ -46,6 +47,29 @@ class App extends React.Component {
       let _content = this.getReadContent();
       _article = (
         <ReadContent title={_content.title} desc={_content.desc}></ReadContent>
+      );
+    } else if (this.state.mode === 'create') {
+      _article = (
+        <CreateContent
+          onSubmit={function (_title, _desc) {
+            this.max_content_id += 1;
+            //이러한 방식으로 max_conent_id의 값을 증가시킨다음
+            // setState 함수를 사용해서 값을 바꾸어야 한다
+
+            let _contents = Array.from(this.state.contents);
+            // original content를 수정하지 않고 새로운 배열 만들었다 -> immutable
+            _contents.push({
+              id: this.max_content_id,
+              title: _title,
+              desc: _desc,
+            });
+            this.setState({
+              contents: _contents,
+              mode: 'update',
+              selected_content_id: this.max_content_id,
+            });
+          }.bind(this)}
+        ></CreateContent>
       );
     }
     return _article;
