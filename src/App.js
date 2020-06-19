@@ -3,14 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import ReadContent from './components/ReadContent';
 import CreateContent from './components/CreateContent';
-
+import UpdateContent from './components/UpdateContent';
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.max_content_id = 3;
     // 데이터를 추가할 때(Create 기능을 사용할 때) 사용하는 정보일 뿐 ui에 영향을 주지 않으므로 state 값으로 주지 않는다
     this.state = {
-      mode: 'create',
+      mode: 'update',
       selected_content_id: 1,
       subject: { title: 'WEB', sub: 'World Wide Web' },
       welcome: { title: 'Welcome', desc: 'Hello React!' },
@@ -70,6 +70,23 @@ class App extends React.Component {
             });
           }.bind(this)}
         ></CreateContent>
+      );
+    } else if (this.state.mode === 'update') {
+      let _content = this.getReadContent();
+      _article = (
+        <UpdateContent
+          data={_content}
+          onSubmit={function (_id, _title, _desc) {
+            let _contents = Array.from(this.state.contents);
+            for (let i = 0; i < _contents.length; i++) {
+              if (_contents[i].id === _id) {
+                _contents[i] = { id: _id, title: _title, desc: _desc };
+                break;
+              }
+            }
+            this.setState({ contents: _contents, mode: 'read' });
+          }.bind(this)}
+        ></UpdateContent>
       );
     }
     return _article;
