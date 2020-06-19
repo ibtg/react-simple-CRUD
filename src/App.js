@@ -5,6 +5,7 @@ import ReadContent from './components/ReadContent';
 import CreateContent from './components/CreateContent';
 import UpdateContent from './components/UpdateContent';
 import Subject from './components/Subject';
+import TOC from './components/TOC';
 
 class App extends React.Component {
   constructor(props) {
@@ -104,7 +105,15 @@ class App extends React.Component {
           onChangePage={function () {
             this.setState({ mode: 'welcome' });
           }.bind(this)}
+          //debugger
         ></Subject>
+
+        <TOC
+          onChangePage={function (id) {
+            this.setState({ mode: 'read', selected_content_id: Number(id) });
+          }.bind(this)}
+          data={this.state.contents} // id가 바뀔 때 마다 state가 바뀌므로 새로 rendering 되면서 Content 부분도 바뀌게 된다
+        ></TOC>
         {this.getContent()}
       </div>
     );
