@@ -6,6 +6,7 @@ import CreateContent from './components/CreateContent';
 import UpdateContent from './components/UpdateContent';
 import Subject from './components/Subject';
 import TOC from './components/TOC';
+import Control from './components/Control';
 
 class App extends React.Component {
   constructor(props) {
@@ -114,6 +115,26 @@ class App extends React.Component {
           }.bind(this)}
           data={this.state.contents} // id가 바뀔 때 마다 state가 바뀌므로 새로 rendering 되면서 Content 부분도 바뀌게 된다
         ></TOC>
+        <Control
+          onChangeMode={function (_mode) {
+            if (_mode === 'delete') {
+              if (window.confirm('delete ?')) {
+                let _contents = Array.from(this.state.contents);
+                for (let i = 0; i < _contents.length; i++) {
+                  if (_contents[i].id === this.state.selected_content_id) {
+                    _contents.splice(i, 1);
+                    this.setState({ mode: 'welcome', contents: _contents });
+                    break;
+                  }
+                }
+              }
+
+              alert('delete');
+            } else {
+              this.setState({ mode: _mode });
+            }
+          }.bind(this)}
+        ></Control>
         {this.getContent()}
       </div>
     );
